@@ -154,6 +154,5 @@ int main() {
 
         imprimirTablero(tablero, filaActual, columnaActual, resaltar);
     }
-
     return 0;
 }
