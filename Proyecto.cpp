@@ -8,12 +8,10 @@ using namespace std;
 // Tamaño del tablero de Sudoku
 const int N = 9;
 
-
 void imprimirTablero(int tablero[N][N]);
 bool esValido(int tablero[N][N], int fila, int columna, int num);
 bool resolverSudoku(int tablero[N][N]);
 bool encontrarCeldaVacia(int tablero[N][N], int& fila, int& columna);
-
 
 // Función para imprimir el tablero de Sudoku
 void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool resaltar[N][N]) {
