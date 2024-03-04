@@ -2,32 +2,22 @@
 #include <iomanip>
 #include <conio.h> // Para utilizar las teclas de flecha
 #include <windows.h> // Para cambiar el color del texto en la consola
-#include <ctime>
-#include <cstdlib>
 
 using namespace std;
 
 // Tamaño del tablero de Sudoku
 const int N = 9;
 
-
-// Función para encontrar una celda vacía en el tablero
-bool encontrarCeldaVacia(int tablero[N][N], int& fila, int& columna) {
-    for (fila = 0; fila < N; fila++) {
-        for (columna = 0; columna < N; columna++) {
-            if (tablero[fila][columna] == 0)
-                return true;
-        }
-    }
-    return false;
-}
-
+// Declaraciones de funciones
+void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool resaltar[N][N]);
+bool esValido(int tablero[N][N], int fila, int columna, int num);
+bool resolverSudoku(int tablero[N][N]);
+bool encontrarCeldaVacia(int tablero[N][N], int& fila, int& columna);
 
 // Función para imprimir el tablero de Sudoku
 void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool resaltar[N][N]) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    system("cls"); // Limpiar la pantalla antes de imprimir el tablero
+system("cls"); // Limpiar la pantalla antes de imprimir el tablero
 
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
@@ -42,7 +32,7 @@ void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool 
             if ((j + 1) % 3 == 0 && j < N - 1)
                 cout << "| ";
         }
-        cout << endl;
+cout << endl;
         if ((i + 1) % 3 == 0 && i < N - 1) {
             for (int k = 0; k < N + 2; k++)
                 cout << "---";
@@ -59,7 +49,7 @@ bool esValido(int tablero[N][N], int fila, int columna, int num) {
         if (tablero[fila][i] == num || tablero[i][columna] == num)
             return false;
     }
-    // Verificar si el número está en el subcuadrado 3x3
+// Verificar si el número está en el subcuadrado 3x3
     int inicioFila = fila - fila % 3;
     int inicioColumna = columna - columna % 3;
     for (int i = inicioFila; i < inicioFila + 3; i++) {
@@ -74,21 +64,35 @@ bool esValido(int tablero[N][N], int fila, int columna, int num) {
 // Función para resolver el Sudoku utilizando la técnica de vuelta atrás (backtracking)
 bool resolverSudoku(int tablero[N][N]) {
     int fila, columna;
+// Si no hay celdas vacías, se ha resuelto el Sudoku
     if (!encontrarCeldaVacia(tablero, fila, columna))
         return true;
-    int availableNumbers[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    srand(time(nullptr));
-    for (int i = 0; i < N; ++i) {
-        int j = i + std::rand() % (N - i);
-        swap(availableNumbers[i], availableNumbers[j]);
-    }
-    for (int i = 0; i < N; ++i) {
-        int num = availableNumbers[i];
+
+    // Probar números del 1 al 9
+    for (int num = 1; num <= 9; num++) {
+        // Si el número puede ser colocado en la celda actual
         if (esValido(tablero, fila, columna, num)) {
+            // Colocar el número en la celda
             tablero[fila][columna] = num;
+
+            // Intentar resolver el Sudoku recursivamente
             if (resolverSudoku(tablero))
                 return true;
+
+            // Si no se puede resolver con este número, retroceder
             tablero[fila][columna] = 0;
+        }
+    }
+    // No se encontró una solución
+    return false;
+}
+
+// Función para encontrar una celda vacía en el tablero
+bool encontrarCeldaVacia(int tablero[N][N], int& fila, int& columna) {
+    for (fila = 0; fila < N; fila++) {
+        for (columna = 0; columna < N; columna++) {
+            if (tablero[fila][columna] == 0)
+                return true;
         }
     }
     return false;
@@ -96,36 +100,29 @@ bool resolverSudoku(int tablero[N][N]) {
 
 
 // Función principal
+
 int main() {
-    int tablero[N][N] = {0};
+    int tablero[N][N] = {
+        {5, 3, 0, 0, 7, 0, 0, 0, 0},
+        {6, 0, 0, 1, 9, 5, 0, 0, 0},
+        {0, 9, 8, 0, 0, 0, 0, 6, 0},
+        {8, 0, 0, 0, 6, 0, 0, 0, 3},
+        {4, 0, 0, 8, 0, 3, 0, 0, 1},
+        {7, 0, 0, 0, 2, 0, 0, 0, 6},
+        {0, 6, 0, 0, 0, 0, 2, 8, 0},
+        {0, 0, 0, 4, 1, 9, 0, 0, 5},
+        {0, 0, 0, 0, 8, 0, 0, 7, 9}
+    };
 
-    srand(time(nullptr));
-
-
-    // Generar la primera fila con números aleatorios
-    int availableNumbers[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    for (int j = 0; j < N; j++) {
-        int randIndex = rand() % (N - j) + j;
-        int temp = availableNumbers[j];
-        availableNumbers[j] = availableNumbers[randIndex];
-        availableNumbers[randIndex] = temp;
-        tablero[0][j] = availableNumbers[j];
-    }
-
-    // Resolver el Sudoku
-    resolverSudoku(tablero);
-
-    // Imprimir el tablero resultante
     bool resaltar[N][N] = {false};
     int filaActual = 0, columnaActual = 0;
-    imprimirTablero(tablero, filaActual, columnaActual, resaltar);
 
+    imprimirTablero(tablero, filaActual, columnaActual, resaltar);
 
     int tecla;
     while (true) {
         tecla = getch(); // Leer la tecla presionada sin esperar que se presione Enter
-
-        switch (tecla) {
+ switch (tecla) {
             case 72: // Flecha arriba
                 filaActual = (filaActual - 1 + N) % N;
                 break;
@@ -147,7 +144,7 @@ int main() {
                         tablero[filaActual][columnaActual] = num;
                         resaltar[filaActual][columnaActual] = !esValido(tablero, filaActual, columnaActual, num);
                     } else {
-                        cout << "Numero invalido. Intente nuevamente." << endl;
+cout << "Numero invalido. Intente nuevamente." << endl;
                     }
                 } else {
                     cout << "El numero en esta posicion no se puede cambiar." << endl;
