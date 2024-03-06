@@ -65,21 +65,21 @@ bool resolverSudoku(int tablero[N][N]) {
 
 // Funcion para imprimir el tablero de Sudoku
 void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool resaltar[N][N], bool ocultar[N][N]) {
-	
+
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     system("cls"); // Limpiar la pantalla antes de imprimir el tablero
-    
+
     // Instrucciones
     cout << "\nInstrucciones:\n";
-    cout << " - Usa las teclas de flecha para moverte por el tablero.\n";
-    cout << " - Presiona Enter para ingresar un numero en la celda actual.\n";
-    cout << " - Si el numero ingresado es correcto, se resaltara en verde.\n";
-    cout << " - Si el numero ingresado es incorrecto, se resaltara en rojo.\n";
-    cout << " - Presiona Escape para salir del juego.\n";
+    cout << " 1. Usa las teclas de flecha para moverte por el tablero\n";
+    cout << " 2. Presiona Enter para ingresar un numero en la celda actual\n";
+    cout << " 3. Si el numero ingresado es correcto, se resaltara en verde\n";
+    cout << " 4. Si el numero ingresado es incorrecto, se resaltara en rojo\n";
+    cout << " 5. Presiona Escape para salir del juego\n";
     cout << endl;
     cout << endl;
-    
+
 
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
@@ -102,8 +102,8 @@ void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool 
         }
     }
     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED); // Restablecer color a blanco (por defecto)
-    
-    
+
+
 }
 
 
@@ -126,11 +126,11 @@ void ocultarNumeros(int tablero[N][N], bool ocultar[N][N], int cantidad) {
 int main() {
     int tablero[N][N] = {0};
     int tableroResuelto[N][N] = {0}; // Aqui guardaremos el sudoku resuelto
-    
-    
+
+
     srand(time(nullptr));
-    
-    
+
+
     // Generar la primera fila con numeros aleatorios
     int availableNumbers[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     for (int j = 0; j < N; j++) {
@@ -140,17 +140,17 @@ int main() {
         availableNumbers[randIndex] = temp;
         tablero[0][j] = availableNumbers[j];
     }
-    
+
     // Resolver el Sudoku
     resolverSudoku(tablero);
-    
+
     // Guardar el sudoku resuelto
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             tableroResuelto[i][j] = tablero[i][j];
         }
     }
-    
+
     // Ocultar algunos numeros
     bool ocultar[N][N] = {false};
     ocultarNumeros(tablero, ocultar, 40); // Cambia el segundo parametro para ajustar la cantidad de numeros ocultos
@@ -161,7 +161,7 @@ int main() {
     int filaActual = 0, columnaActual = 0;
     imprimirTablero(tablero, filaActual, columnaActual, resaltar, ocultar);
 
-    
+
     int tecla;
     while (true) {
         tecla = getch(); // Leer la tecla presionada sin esperar que se presione Enter
