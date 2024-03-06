@@ -17,7 +17,7 @@ bool esValido(int tablero[N][N], int fila, int columna, int num) {
         if (tablero[fila][i] == num || tablero[i][columna] == num)
             return false;
     }
-    // Verificar si el número está en el subcuadrado 3x3
+    // Verificar si el número esta en el subcuadrado 3x3
     int inicioFila = fila - fila % 3;
     int inicioColumna = columna - columna % 3;
     for (int i = inicioFila; i < inicioFila + 3; i++) {
@@ -29,7 +29,7 @@ bool esValido(int tablero[N][N], int fila, int columna, int num) {
     return true;
 }
 
-// Función para encontrar una celda vacía en el tablero
+// Funcion para encontrar una celda vacia en el tablero
 bool encontrarCeldaVacia(int tablero[N][N], int& fila, int& columna) {
     for (fila = 0; fila < N; fila++) {
         for (columna = 0; columna < N; columna++) {
@@ -40,7 +40,7 @@ bool encontrarCeldaVacia(int tablero[N][N], int& fila, int& columna) {
     return false;
 }
 
-// Función para resolver el Sudoku utilizando la técnica de vuelta atrás (backtracking)
+// Funcion para resolver el Sudoku utilizando la tecnica de vuelta atras (backtracking)
 bool resolverSudoku(int tablero[N][N]) {
     int fila, columna;
     if (!encontrarCeldaVacia(tablero, fila, columna))
@@ -63,7 +63,7 @@ bool resolverSudoku(int tablero[N][N]) {
     return false;
 }
 
-// Función para imprimir el tablero de Sudoku
+// Funcion para imprimir el tablero de Sudoku
 void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool resaltar[N][N], bool ocultar[N][N]) {
 	
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -74,7 +74,7 @@ void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool 
     cout << "\nInstrucciones:\n";
     cout << " - Usa las teclas de flecha para moverte por el tablero.\n";
     cout << " - Presiona Enter para ingresar un numero en la celda actual.\n";
-    cout << " - Si el numero ingresado es correcto, se resaltará en verde.\n";
+    cout << " - Si el numero ingresado es correcto, se resaltara en verde.\n";
     cout << " - Si el numero ingresado es incorrecto, se resaltara en rojo.\n";
     cout << " - Presiona Escape para salir del juego.\n";
     cout << endl;
@@ -84,11 +84,11 @@ void imprimirTablero(int tablero[N][N], int filaActual, int columnaActual, bool 
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             if (i == filaActual && j == columnaActual) {
-                SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE); // Establecer color de texto azul para la posición actual
+                SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE); // Establecer color de texto azul para la posicion actual
             } else if (resaltar[i][j]) {
                 SetConsoleTextAttribute(hConsole, FOREGROUND_RED); // Establecer color de texto rojo para números incorrectos
             } else {
-                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN); // Establecer color de texto verde para números correctos
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN); // Establecer color de texto verde para numeros correctos
             }
             cout << setw(2) << tablero[i][j] << " ";
             if ((j + 1) % 3 == 0 && j < N - 1)
@@ -122,16 +122,16 @@ void ocultarNumeros(int tablero[N][N], bool ocultar[N][N], int cantidad) {
 
 
 
-// Función principal
+// Funcion principal
 int main() {
     int tablero[N][N] = {0};
-    int tableroResuelto[N][N] = {0}; // Aquí guardaremos el sudoku resuelto
+    int tableroResuelto[N][N] = {0}; // Aqui guardaremos el sudoku resuelto
     
     
     srand(time(nullptr));
     
     
-    // Generar la primera fila con números aleatorios
+    // Generar la primera fila con numeros aleatorios
     int availableNumbers[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     for (int j = 0; j < N; j++) {
         int randIndex = rand() % (N - j) + j;
@@ -151,9 +151,9 @@ int main() {
         }
     }
     
-    // Ocultar algunos números
+    // Ocultar algunos numeros
     bool ocultar[N][N] = {false};
-    ocultarNumeros(tablero, ocultar, 40); // Cambia el segundo parámetro para ajustar la cantidad de números ocultos
+    ocultarNumeros(tablero, ocultar, 40); // Cambia el segundo parametro para ajustar la cantidad de numeros ocultos
 
 
     // Iniciar el juego
@@ -179,7 +179,7 @@ int main() {
             case 77: // Flecha derecha
                 columnaActual = (columnaActual + 1) % N;
                 break;
-            case 13: // Tecla Enter para ingresar número en la posición actual
+            case 13: // Tecla Enter para ingresar numero en la posicion actual
                 if (ocultar[filaActual][columnaActual]) {
                     int num;
                     cout << endl;
@@ -188,9 +188,9 @@ int main() {
                     if (num >= 1 && num <= 9) {
                         tablero[filaActual][columnaActual] = num;
                         if (tablero[filaActual][columnaActual] == tableroResuelto[filaActual][columnaActual]) {
-                            resaltar[filaActual][columnaActual] = false; // Cambiar a verde si el número ingresado es igual al número en el sudoku resuelto
+                            resaltar[filaActual][columnaActual] = false; // Cambiar a verde si el numero ingresado es igual al número en el sudoku resuelto
                         } else {
-                            resaltar[filaActual][columnaActual] = true; // Cambiar a rojo si el número ingresado no es igual al número en el sudoku resuelto
+                            resaltar[filaActual][columnaActual] = true; // Cambiar a rojo si el numero ingresado no es igual al número en el sudoku resuelto
                         }
                     } else {
                         cout << "Numero invalido. Intente nuevamente." << endl;
